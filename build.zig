@@ -21,6 +21,13 @@ pub fn build(b: *Build) !void {
             null;
 
     const lua_src = b.dependency("lua", .{});
+    b.addNamedLazyPath("src", lua_src.path("src"));
+    b.addNamedLazyPath("doc", lua_src.path("doc"));
+
+    const headers = b.addNamedWriteFiles("headers");
+    _ = headers.addCopyDirectory(lua_src.path("src"), "", .{
+        .include_extensions = &.{ ".h", ".hpp" },
+    });
 
     const static = b.addModule("staticlib", .{
         .link_libc = true,
@@ -219,11 +226,3 @@ const lib_src = [_][]const u8{
     "linit.c",
 };
 const base_src = core_src ++ lib_src;
-
-const lua_inc = [_][]const u8{
-    "lua.h",
-    "luaconf.h",
-    "lualib.h",
-    "lauxlib.h",
-    "lua.hpp",
-};
