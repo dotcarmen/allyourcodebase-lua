@@ -43,7 +43,7 @@ pub fn buildOptions(b: *Build, opts: struct {
         .target = opts.target,
 
         .shared = b.option(bool, "shared", "build as shared library") orelse target.isMinGW(),
-        .reentrant = b.option(bool, "reentrant", "enable reentrant lua") orelse (target.os.tag == .solaris),
+        .reentrant = b.option(bool, "reentrant", "enable reentrant lua") orelse false,
 
         .compat_5_3 = b.option(bool, "compat_5_3", "enable deprecated lua 5.3 apis") orelse false,
         .compat_mathlib = b.option(bool, "compat_mathlib", "enable deprecated math apis") orelse false,
@@ -62,7 +62,7 @@ pub fn buildOptions(b: *Build, opts: struct {
         .use_c89 = b.option(bool, "use_c89", "limit lua to c89 apis") orelse false,
         .use_dlopen = b.option(bool, "use_dlopen", "enable dlopen support") orelse
             switch (target.os.tag) {
-                .aix, .solaris => true,
+                .aix => true,
                 else => false,
             },
         .use_ios = b.option(bool, "use_ios", "enable ios apis") orelse (target.os.tag == .ios),
@@ -74,7 +74,7 @@ pub fn buildOptions(b: *Build, opts: struct {
         .use_macosx = b.option(bool, "use_macosx", "enable macos apis") orelse (target.os.tag == .macos),
         .use_posix = b.option(bool, "use_posix", "enable posix apis") orelse
             switch (target.os.tag) {
-                .aix, .solaris => true,
+                .aix => true,
                 else => false,
             },
         .use_readline = b.option(bool, "use_readline", "enable readline apis") orelse
